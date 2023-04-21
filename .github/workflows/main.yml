@@ -35,6 +35,6 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem -r deploy.sh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/home/${{ secrets.VPS_USER }}
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'chmod +x /home/${{ secrets.VPS_USER }}/deploy.sh && /home/${{ secrets.VPS_USER }}/deploy.sh ${{ secrets.DOCKERHUB_USERNAME }}'
+          scp -i private_key.pem -r deploy.sh ${{ secrets.VPS_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.VPS_USER }}
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.SERVER_IP }} 'chmod +x /home/${{ secrets.VPS_USER }}/deploy.sh && /home/${{ secrets.VPS_USER }}/deploy.sh ${{ secrets.DOCKERHUB_USERNAME }}'
         
