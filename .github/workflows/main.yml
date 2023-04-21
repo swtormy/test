@@ -31,6 +31,7 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/test-frontend .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/test-frontend
 
+          
       - name: Deploy to VPS
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
