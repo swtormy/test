@@ -1,0 +1,39 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push backend Docker image
+        run: |
+          cd backend
+          docker build -t <DOCKERHUB_USERNAME>/test-backend .
+          docker push <DOCKERHUB_USERNAME>/test-backend
+
+      - name: Build and push frontend Docker image
+        run: |
+          cd frontend
+          docker build -t <DOCKERHUB_USERNAME>/test-frontend .
+          docker push <DOCKERHUB_USERNAME>/test-frontend
+
+      - name: Deploy to VPS
+        run: |
+          echo ${{ secrets.SSH_PRIVATE_KEY }} > private_key.pem
+          chmod 600 private_key.pem
+          scp -i private_key.pem -r deploy.sh ${{ secrets.VPS_USER }}@${{ secrets.SERVER_IP }}:/${{ secrets.VPS_USER }}
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.SERVER_IP }} 'chmod +x /${{ secrets.VPS_USER }}/deploy.sh && /${{ secrets.VPS_USER }}/deploy.sh <DOCKERHUB_USERNAME>'
