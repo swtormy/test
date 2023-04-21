@@ -22,14 +22,14 @@ jobs:
       - name: Build and push backend Docker image
         run: |
           cd backend
-          docker build -t <DOCKERHUB_USERNAME>/test-backend .
-          docker push <DOCKERHUB_USERNAME>/test-backend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/test-backend .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/test-backend
 
       - name: Build and push frontend Docker image
         run: |
           cd frontend
-          docker build -t <DOCKERHUB_USERNAME>/test-frontend .
-          docker push <DOCKERHUB_USERNAME>/test-frontend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/test-frontend .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/test-frontend
 
       - name: Deploy to VPS
         run: |
